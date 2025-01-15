@@ -1,5 +1,12 @@
 import { getCompany } from "./db/companies.js";
-import { getJob, getJobs, getJobsByCompanyId } from "./db/jobs.js";
+import {
+  createJob,
+  deleteJob,
+  getJob,
+  getJobs,
+  getJobsByCompanyId,
+  updateJob,
+} from "./db/jobs.js";
 import { GraphQLError } from "graphql";
 
 export const resolvers = {
@@ -18,6 +25,17 @@ export const resolvers = {
         throw notFoundError("No Job found with id " + id);
       }
       return job;
+    },
+  },
+
+  Mutation: {
+    createJob: (_root, { input: { title, description } }) => {
+      const companyId = "FjcJCHJALA4i"; // TODO set based on user
+      return createJob({ companyId, title, description });
+    },
+    deleteJob: (_root, { id }) => deleteJob(id),
+    updateJob: (_root, { input: { id, title, description } }) => {
+      return updateJob({ id, title, description });
     },
   },
 
