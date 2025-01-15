@@ -1,3 +1,21 @@
 type Query {
-  greeting: String
+  jobs: [Job!]
+  job(id: ID!): Job!
+  company(id: ID!): Company!
+}
+
+type Job {
+  id: ID!
+  """This __date__ when the post was published, in ISO-8601 format. E.g. `2022-12-31`."""
+  date: String!
+  title: String!
+  company: Company!
+  description: String
+}
+
+type Company {
+  id: ID,
+  name: String!
+  description: String
+  jobs: [Job!]!
 }
