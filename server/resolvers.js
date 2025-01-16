@@ -1,5 +1,6 @@
 import { getCompany } from "./db/companies.js";
 import {
+  countJobs,
   createJob,
   deleteJob,
   getJob,
@@ -11,7 +12,11 @@ import { GraphQLError } from "graphql";
 
 export const resolvers = {
   Query: {
-    jobs: async () => getJobs(),
+    jobs: async (_root, { limit, offset }) => {
+      const items = await getJobs(limit, offset);
+      const totalCount = await countJobs();
+      return { items, totalCount };
+    },
     company: async (_root, { id }) => {
       const company = await getCompany(id);
       if (!company) {
@@ -49,7 +54,12 @@ export const resolvers = {
       if (!user) {
         throw unauthorizedError("User not authenticated");
       }
-      const job = updateJob({ id, companyId: user.companyId, title, description });
+      const job = updateJob({
+        id,
+        companyId: user.companyId,
+        title,
+        description,
+      });
       if (!job) {
         throw notFoundError(`No job found with id ${id}`);
       }
