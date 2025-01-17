@@ -1,29 +1,29 @@
 type Query {
+  company(id: ID!): Company
+  job(id: ID!): Job
   jobs(limit: Int, offset: Int): JobSubList
-  job(id: ID!): Job!
-  company(id: ID!): Company!
 }
 
 type Mutation {
   createJob(input: CreateJobInput!): Job
   deleteJob(id: ID!): Job
-  updateJob(input: UpdateJobInput): Job
+  updateJob(input: UpdateJobInput!): Job
+}
+
+type Company {
+  id: ID!
+  name: String!
+  description: String
+  jobs: [Job!]!
 }
 
 type Job {
   id: ID!
-  """This __date__ when the post was published, in ISO-8601 format. E.g. `2022-12-31`."""
+  """The __date__ when the job was published, in ISO-8601 format. E.g. `2022-12-31`."""
   date: String!
   title: String!
   company: Company!
   description: String
-}
-
-type Company {
-  id: ID,
-  name: String!
-  description: String
-  jobs: [Job!]!
 }
 
 type JobSubList {
@@ -41,5 +41,3 @@ input UpdateJobInput {
   title: String!
   description: String
 }
-
-
